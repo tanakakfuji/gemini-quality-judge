@@ -1,3 +1,11 @@
+/data/labels/*.csv
+/data/responses/*.csv
+
+!/data/labels/sample_label.csv
+!/data/responses/sample_response.csv
+
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
