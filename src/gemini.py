@@ -9,20 +9,32 @@ load_dotenv(override=True)
 
 def execute_requests(prompts):
   keys = os.getenv('GEMINI_API_KEYS')
-  if not keys:
-    raise ValueError('GEMINI_API_KEYSが空文字です')
   key_list = keys.split(',')
   results = []
+  error_count = 0
   for i, prompt in enumerate(prompts):
-    client = genai.Client(api_key=key_list[i % len(key_list)])
-    result = _send_request(client, prompt)
+    key=key_list[i % len(key_list)]
+    result = _send_request(key, prompt)
     results.append(result)
-    time.sleep(float(os.getenv('REQUEST_INTERVAL_TIME')))
+    # 連続したAPIエラーへの対処
+    if result['status'] == 'success':
+      error_count = 0
+    else:
+      error_count += 1
+    if error_count == 5:
+      raise RuntimeError('API呼び出しが5回連続して失敗したため、処理を停止します')
+    if not (i == len(prompts) - 1):
+      time.sleep(float(os.getenv('REQUEST_INTERVAL_TIME')))
 
   return results
 
-def _send_request(client, prompt):
+def _send_request(key, prompt):
+  if not isinstance(key, str) or not key.strip():
+    raise ValueError('APIキーが不正です')
+  if not prompt:
+    raise ValueError('プロンプトが空文字です')
   try:
+    client = genai.Client(api_key=key)
     response = client.models.generate_content(
       model=os.getenv('GEMINI_MODEL_NAME'),
       config=types.GenerateContentConfig(
