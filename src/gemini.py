@@ -39,7 +39,7 @@ def _send_request(key, prompt):
       model=os.getenv('GEMINI_MODEL_NAME'),
       config=types.GenerateContentConfig(
           system_instruction="以下は、タスクを説明する指示です。要求を適切に満たす応答を書きなさい。",
-          max_output_tokens=1024,
+          max_output_tokens=2048,
           seed=1234,
           top_p=0.95,
           temperature=1.0,
