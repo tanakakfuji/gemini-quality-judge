@@ -48,10 +48,3 @@ def _extract_score(text):
     score = {m: 0 for m in METRICS}
     status = 'EXTRACT_ERROR'
   return score, status
-
-# data = [
-#   {"id": 1, "query": "Pythonでリストの長さを取得する方法は？", "response": "アプリケーションをコンテナとして分離・実行するための仮想化技術です。", "reference": "len関数を使います"},
-#   {"id": 2, "query": "HTMLでリンクを作成するタグは？", "response": "<link>タグを使用します。", "reference": "<a>タグを使用します。例：<a href='https://example.com'>リンク</a>"}
-# ]
-
-# print(_build_prompts(True, data))
