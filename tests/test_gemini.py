@@ -37,7 +37,7 @@ def test_execute_requests_success(monkeypatch):
       call(5.0),
     ])
 
-def test_execute_requests_success(monkeypatch):
+def test_execute_requests_continuous_api_error(monkeypatch):
   monkeypatch.setenv('GEMINI_API_KEYS', 'k1,k2,k3')
   monkeypatch.setenv('REQUEST_INTERVAL_TIME', '5.0')
   prompts = ['プロンプト1', 'プロンプト2', 'プロンプト3', 'プロンプト4', 'プロンプト5', 'プロンプト6']
