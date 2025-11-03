@@ -20,6 +20,7 @@ def main():
   save_json(avg_scores, f'outputs/{args.output_dir}', 'score.json')
   print(json.dumps(avg_scores, ensure_ascii=False, indent=2))
   print(f'エラー件数: {error_count}')
+  print(f'outputs/{args.output_dir} に評価結果を出力しました')
 
 def _build_data(label, response):
   if len(label) != len(response):

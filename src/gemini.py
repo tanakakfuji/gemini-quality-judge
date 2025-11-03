@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 from google.genai import errors
+from tqdm import tqdm
 
 load_dotenv(override=True)
 
@@ -12,7 +13,7 @@ def execute_requests(prompts):
   key_list = keys.split(',')
   results = []
   error_count = 0
-  for i, prompt in enumerate(prompts):
+  for i, prompt in enumerate(tqdm(prompts, desc='execute requests')):
     key=key_list[i % len(key_list)]
     result = _send_request(key, prompt)
     results.append(result)
