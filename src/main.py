@@ -5,8 +5,8 @@ import json
 
 def main():
   parser = argparse.ArgumentParser(description='GeminiによるQAタスクの品質評価を実施する自動評価ツール')
-  parser.add_argument('--label', type=str, required=True, help='正解ラベルのCSVファイルを指定', metavar='sample_label.csv')
-  parser.add_argument('--response', type=str, required=True, help='評価対象のCSVファイルを指定', metavar='sample_response.csv')
+  parser.add_argument('--label', type=str, required=True, help='正解ラベルのCSVファイルを指定', metavar='data/labels/sample_label.csv')
+  parser.add_argument('--response', type=str, required=True, help='評価対象のCSVファイルを指定', metavar='data/responses/sample_response.csv')
   parser.add_argument('--output_dir', type=str, required=True, help='評価結果の出力先を指定', metavar='sample_dir')
   parser.add_argument('--accuracy', type=str, choices=['strict', 'lenient'], required=True, help='正確性において、参考回答と厳密に比較するかどうかを選択')
   args = parser.parse_args()
@@ -17,7 +17,7 @@ def main():
   results = [data[i] | results[i] for i in range(len(data))]
 
   save_csv(results, f'outputs/{args.output_dir}', 'results.csv')
-  save_json(avg_scores, f'outputs/{args.output_dir}', 'score.json')
+  save_json(avg_scores, f'outputs/{args.output_dir}', 'avg_scores.json')
   print(json.dumps(avg_scores, ensure_ascii=False, indent=2))
   print(f'エラー件数: {error_count}')
   print(f'outputs/{args.output_dir} に評価結果を出力しました')
