@@ -90,12 +90,12 @@ python -m src.main --accuracy strict --response data/responses/sample_response.c
 |GEMINI_API_KEYS|APIキーを指定. 複数ある場合はカンマ区切りで指定|
 |REQUEST_INTERVAL_TIME|リクエストを送信する間隔を秒数で指定|
 
-※ Geminiのレート制限（無料枠）の回避を目的として、APIキーを複数指定することが可能である。
+※ Geminiのレート制限（無料枠）の回避を目的として、APIキーを複数指定することが可能です。
 
-例）10RPMのAPIキー3つをGEMINI_API_KEYSに指定 → 30RPMとなるため、2.0をREQUEST_INTERVAL_TIMEに指定すれば1分あたりのレート制限は超えない。
+例）10RPMのAPIキー3つをGEMINI_API_KEYSに指定 → 30RPMとなるため、2.0をREQUEST_INTERVAL_TIMEに指定すれば1分あたりのレート制限は超えないです。
 
 ### 出力結果
-`outputs/{sample_dir}` 配下に`results.csv` と`avg_scores.json` が出力される。それぞれのデータ形式は以下の通りです。
+`outputs/{sample_dir}` 配下に`results.csv` と`avg_scores.json` が出力されます。それぞれのデータ形式は以下の通りです。
 
 - results.csv (text列に評価結果が格納)
 
