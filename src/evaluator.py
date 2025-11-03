@@ -21,7 +21,7 @@ def evaluate(strict_ac, data):
     for metric, point in score.items():
       scores[metric].append(point)
   avg_scores = {
-    m: sum(points) / (len(points) - error_count)
+    m: round(sum(points) / (len(points) - error_count), 2)
     if len(points) - error_count else None
     for m, points in scores.items()
   }
