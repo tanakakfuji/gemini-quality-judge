@@ -1,5 +1,6 @@
 /data/labels/*.csv
 /data/responses/*.csv
+outputs/
 
 !/data/labels/sample_label.csv
 !/data/responses/sample_response.csv
