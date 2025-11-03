@@ -92,7 +92,7 @@ python -m src.main --accuracy strict --response data/responses/sample_response.c
 
 ※ Geminiのレート制限（無料枠）の回避を目的として、APIキーを複数指定することが可能です。
 
-例）10RPMのAPIキー3つをGEMINI_API_KEYSに指定 → 30RPMとなるため、2.0をREQUEST_INTERVAL_TIMEに指定すれば1分あたりのレート制限は超えないです。
+例）10RPMのAPIキー3つをGEMINI_API_KEYSに指定 → 30RPMとなるため、2.0をREQUEST_INTERVAL_TIMEに指定すれば1分あたりのレート制限は超えないです。（実際のところ、API呼び出しは10秒近くかかるため、REQUEST_INTERVAL_TIMEは0.0でも良い）
 
 ### 出力結果
 `outputs/{sample_dir}` 配下に`results.csv` と`avg_scores.json` が出力されます。それぞれのデータ形式は以下の通りです。
