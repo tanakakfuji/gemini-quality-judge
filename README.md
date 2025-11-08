@@ -95,7 +95,7 @@ python -m src.main --accuracy strict --response data/responses/sample_response.c
 例）10RPMのAPIキー3つをGEMINI_API_KEYSに指定 → 30RPMとなるため、2.0をREQUEST_INTERVAL_TIMEに指定すれば1分あたりのレート制限は超えないです。（実際のところ、API呼び出しは10秒近くかかるため、REQUEST_INTERVAL_TIMEは0.0でも良い）
 
 ### 出力結果
-`outputs/{sample_dir}` 配下に`results.csv` と`avg_scores.json` が出力されます。それぞれのデータ形式は以下の通りです。
+`outputs/{output_dir}` 配下に`results.csv` と`avg_scores.json` が出力されます。それぞれのデータ形式は以下の通りです。
 
 - results.csv (text列に評価結果が格納)
 
