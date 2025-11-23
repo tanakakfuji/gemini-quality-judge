@@ -31,7 +31,7 @@ DATA = [
 def test_evaluate_without_errors():
   results = [
     {
-      'text': '''
+      'text': dedent('''
         正確性(評価理由): 正確性テキスト
         正確性: [[1]]
         流暢性(評価理由): 流暢性テキスト
@@ -42,11 +42,11 @@ def test_evaluate_without_errors():
         関連性: [[4]]
         総合評価(評価理由): 総合評価テキスト
         総合評価: [[5]]
-      ''',
+      '''),
       'status': 'success'
     },
     {
-      'text': '''
+      'text': dedent('''
         正確性(評価理由): 正確性テキスト
         正確性: [[3]]
         流暢性(評価理由): 流暢性テキスト
@@ -57,7 +57,7 @@ def test_evaluate_without_errors():
         関連性: [[3]]
         総合評価(評価理由): 総合評価テキスト
         総合評価: [[3]]
-      ''',
+      '''),
       'status': 'success'
     }
   ]
@@ -66,13 +66,54 @@ def test_evaluate_without_errors():
     patch('src.evaluator.execute_requests', return_value=results) as mock_execute
   ):
     assert evaluate(True, DATA) == (
-      results,
+      [
+        {
+          '正確性': 1,
+          '流暢性': 2,
+          '詳細性': 3,
+          '関連性': 4,
+          '総合評価': 5,
+          'text': dedent('''
+            正確性(評価理由): 正確性テキスト
+            正確性: [[1]]
+            流暢性(評価理由): 流暢性テキスト
+            流暢性: [[2]]
+            詳細性(評価理由): 詳細性テキスト
+            詳細性: [[3]]
+            関連性(評価理由): 関連性テキスト
+            関連性: [[4]]
+            総合評価(評価理由): 総合評価テキスト
+            総合評価: [[5]]
+          '''),
+          'status': 'success'
+        },
+        {
+          '正確性': 3,
+          '流暢性': 3,
+          '詳細性': 3,
+          '関連性': 3,
+          '総合評価': 3,
+          'text': dedent('''
+            正確性(評価理由): 正確性テキスト
+            正確性: [[3]]
+            流暢性(評価理由): 流暢性テキスト
+            流暢性: [[3]]
+            詳細性(評価理由): 詳細性テキスト
+            詳細性: [[3]]
+            関連性(評価理由): 関連性テキスト
+            関連性: [[3]]
+            総合評価(評価理由): 総合評価テキスト
+            総合評価: [[3]]
+          '''),
+          'status': 'success'
+        }
+      ],
       {
-        '正確性': 2,
+        '正確性': 2.0,
         '流暢性': 2.5,
-        '詳細性': 3,
+        '詳細性': 3.0,
         '関連性': 3.5,
-        '総合評価': 4
+        '総合評価': 4.0
       },
       0
     )
@@ -82,7 +123,7 @@ def test_evaluate_without_errors():
 def test_evaluate_with_api_error():
   results = [
     {
-      'text': '''
+      'text': dedent('''
         正確性(評価理由): 正確性テキスト
         正確性: [[1]]
         流暢性(評価理由): 流暢性テキスト
@@ -93,7 +134,7 @@ def test_evaluate_with_api_error():
         関連性: [[4]]
         総合評価(評価理由): 総合評価テキスト
         総合評価: [[5]]
-      ''',
+      '''),
       'status': 'success'
     },
     {
@@ -106,13 +147,43 @@ def test_evaluate_with_api_error():
     patch('src.evaluator.execute_requests', return_value=results) as mock_execute
   ):
     assert evaluate(True, DATA) == (
-      results,
+      [
+        {
+          '正確性': 1,
+          '流暢性': 2,
+          '詳細性': 3,
+          '関連性': 4,
+          '総合評価': 5,
+          'text': dedent('''
+            正確性(評価理由): 正確性テキスト
+            正確性: [[1]]
+            流暢性(評価理由): 流暢性テキスト
+            流暢性: [[2]]
+            詳細性(評価理由): 詳細性テキスト
+            詳細性: [[3]]
+            関連性(評価理由): 関連性テキスト
+            関連性: [[4]]
+            総合評価(評価理由): 総合評価テキスト
+            総合評価: [[5]]
+          '''),
+          'status': 'success'
+        },
+        {
+          '正確性': 0,
+          '流暢性': 0,
+          '詳細性': 0,
+          '関連性': 0,
+          '総合評価': 0,
+          'text': '',
+          'status': 'SERVER_ERROR'
+        }
+      ],
       {
-        '正確性': 1,
-        '流暢性': 2,
-        '詳細性': 3,
-        '関連性': 4,
-        '総合評価': 5
+        '正確性': 1.0,
+        '流暢性': 2.0,
+        '詳細性': 3.0,
+        '関連性': 4.0,
+        '総合評価': 5.0
       },
       1
     )
@@ -135,7 +206,26 @@ def test_evaluate_with_api_errors():
     patch('src.evaluator.execute_requests', return_value=results) as mock_execute
   ):
     assert evaluate(True, DATA) == (
-      results,
+      [
+        {
+          '正確性': 0,
+          '流暢性': 0,
+          '詳細性': 0,
+          '関連性': 0,
+          '総合評価': 0,
+          'text': '',
+          'status': 'SERVER_ERROR'
+        },
+        {
+          '正確性': 0,
+          '流暢性': 0,
+          '詳細性': 0,
+          '関連性': 0,
+          '総合評価': 0,
+          'text': '',
+          'status': 'SERVER_ERROR'
+        }
+      ],
       {
         '正確性': None,
         '流暢性': None,
@@ -180,6 +270,11 @@ def test_evaluate_with_extract_error():
     assert evaluate(True, DATA) == (
       [
         {
+          '正確性': 1,
+          '流暢性': 2,
+          '詳細性': 3,
+          '関連性': 4,
+          '総合評価': 5,
           'text': dedent('''
             正確性(評価理由): 正確性テキスト
             正確性: [[1]]
@@ -195,6 +290,11 @@ def test_evaluate_with_extract_error():
           'status': 'success'
         },
         {
+          '正確性': 0,
+          '流暢性': 0,
+          '詳細性': 0,
+          '関連性': 0,
+          '総合評価': 0,
           'text': dedent('''
             正確性(評価理由): 正確性テキスト
             正確性: [[3]]
@@ -203,11 +303,11 @@ def test_evaluate_with_extract_error():
         }
       ],
       {
-        '正確性': 1,
-        '流暢性': 2,
-        '詳細性': 3,
-        '関連性': 4,
-        '総合評価': 5
+        '正確性': 1.0,
+        '流暢性': 2.0,
+        '詳細性': 3.0,
+        '関連性': 4.0,
+        '総合評価': 5.0
       },
       1
     )
@@ -238,6 +338,11 @@ def test_evaluate_with_extract_errors():
     assert evaluate(True, DATA) == (
       [
         {
+          '正確性': 0,
+          '流暢性': 0,
+          '詳細性': 0,
+          '関連性': 0,
+          '総合評価': 0,
           'text': dedent('''
             正確性(評価理由): 正確性テキスト
             正確性: [[1]]
@@ -245,6 +350,11 @@ def test_evaluate_with_extract_errors():
           'status': 'EXTRACT_ERROR'
         },
         {
+          '正確性': 0,
+          '流暢性': 0,
+          '詳細性': 0,
+          '関連性': 0,
+          '総合評価': 0,
           'text': dedent('''
             正確性(評価理由): 正確性テキスト
             正確性: [[3]]
