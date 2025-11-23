@@ -11,12 +11,13 @@ def evaluate(strict_ac, data):
   results = execute_requests(prompts)
   error_count = 0
   scores = defaultdict(list)
-  for result in results:
-    if result['status'] == 'success':
-      score, result['status'] = _extract_score(result['text'])
+  for i in range(len(results)):
+    if results[i]['status'] == 'success':
+      score, results[i]['status'] = _extract_score(results[i]['text'])
     else:
       score = {m: 0 for m in METRICS}
-    if result['status'] != 'success':
+    results[i] = score | results[i]
+    if results[i]['status'] != 'success':
       error_count += 1
     for metric, point in score.items():
       scores[metric].append(point)
