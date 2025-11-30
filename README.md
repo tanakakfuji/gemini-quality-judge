@@ -100,10 +100,7 @@ python -m src.main --accuracy strict --response data/responses/sample_response.c
 - results.csv (text列に評価結果が格納)
 
 ```
-query,response,reference,text,status
-aaaaaa,aaaaaa,aaaaaa,aaaaaa,success
-bbbbbb,bbbbbb,bbbbbb,bbbbbb,success
-cccccc,cccccc,cccccc,cccccc,success
+query,response,reference,正確性,流暢性,詳細性,関連性,総合評価,text,status
 ```
 
 - avg_scores.json
