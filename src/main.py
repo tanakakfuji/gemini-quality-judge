@@ -1,4 +1,4 @@
-from src.utils import load_csv, save_csv, save_json
+from src.utils import load_csv, save_csv, save_json, load_text
 from src.evaluator import evaluate
 import argparse
 import json
@@ -7,13 +7,14 @@ def main():
   parser = argparse.ArgumentParser(description='GeminiによるQAタスクの品質評価を実施する自動評価ツール')
   parser.add_argument('--label', type=str, required=True, help='正解ラベルのCSVファイルを指定', metavar='data/labels/sample_label.csv')
   parser.add_argument('--response', type=str, required=True, help='評価対象のCSVファイルを指定', metavar='data/responses/sample_response.csv')
+  parser.add_argument('--prompt', type=str, required=True, help='評価用プロンプトのテキストファイルを指定', metavar='data/prompts/eval_prompt.txt')
   parser.add_argument('--output_dir', type=str, required=True, help='評価結果の出力先を指定', metavar='sample_dir')
-  parser.add_argument('--accuracy', type=str, choices=['strict', 'lenient'], required=True, help='正確性において、参考回答と厳密に比較するかどうかを選択')
   args = parser.parse_args()
 
   label, response = load_csv(args.label), load_csv(args.response)
   data = _build_data(label, response)
-  results, avg_scores, error_count = evaluate(args.accuracy == 'strict', data)
+  prompt_template = load_text(args.prompt)
+  results, avg_scores, error_count = evaluate(prompt_template, data)
   results = [data[i] | results[i] for i in range(len(data))]
 
   save_csv(results, f'outputs/{args.output_dir}', 'results.csv')

@@ -1,4 +1,3 @@
-from src.utils import load_text
 from src.gemini import execute_requests
 from collections import defaultdict
 import re
@@ -6,8 +5,8 @@ import re
 METRICS = ['正確性', '流暢性', '詳細性', '関連性', '総合評価']
 SCORE_REGEX = rf'({'|'.join(METRICS)}):\s?\[\[([1-5])\]\]'
 
-def evaluate(strict_ac, data):
-  prompts = _build_prompts(strict_ac, data)
+def evaluate(prompt_template, data):
+  prompts = _build_prompts(prompt_template, data)
   results = execute_requests(prompts)
   error_count = 0
   scores = defaultdict(list)
@@ -28,11 +27,7 @@ def evaluate(strict_ac, data):
   }
   return results, avg_scores, error_count
   
-def _build_prompts(strict_ac, data):
-  if strict_ac:
-    prompt_template = load_text('data/prompts/strict_accuracy.txt')
-  else:
-    prompt_template = load_text('data/prompts/lenient_accuracy.txt')
+def _build_prompts(prompt_template, data):
   prompts = [prompt_template.format(question=d['query'], response=d['response'], reference=d['reference']) for d in data]
   return prompts
 
