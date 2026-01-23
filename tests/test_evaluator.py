@@ -376,66 +376,32 @@ def test_evaluate_with_extract_errors():
 
 
 def test_build_prompts_with_strict_accuracy():
-  with patch('src.evaluator.load_text', return_value=PROMPT_TEMPLATE) as mock_load:
-    assert _build_prompts(True, DATA) == [
-      dedent('''
-      [質問]
-      テスト質問1
+  assert _build_prompts(PROMPT_TEMPLATE, DATA) == [
+    dedent('''
+    [質問]
+    テスト質問1
 
-      [参考回答開始]
-      テスト参考回答1
-      [参考回答終了]
+    [参考回答開始]
+    テスト参考回答1
+    [参考回答終了]
 
-      [AIアシスタント回答開始]
-      テスト回答1
-      [AIアシスタント回答終了]
-      '''),
-      dedent('''
-      [質問]
-      テスト質問2
+    [AIアシスタント回答開始]
+    テスト回答1
+    [AIアシスタント回答終了]
+    '''),
+    dedent('''
+    [質問]
+    テスト質問2
 
-      [参考回答開始]
-      テスト参考回答2
-      [参考回答終了]
+    [参考回答開始]
+    テスト参考回答2
+    [参考回答終了]
 
-      [AIアシスタント回答開始]
-      テスト回答2
-      [AIアシスタント回答終了]
-      ''')
-    ]
-
-    mock_load.assert_called_once_with('data/prompts/strict_accuracy.txt')
-
-def test_build_prompts_with_lenient_accuracy():
-  with patch('src.evaluator.load_text', return_value=PROMPT_TEMPLATE) as mock_load:
-    assert _build_prompts(False, DATA) == [
-      dedent('''
-      [質問]
-      テスト質問1
-
-      [参考回答開始]
-      テスト参考回答1
-      [参考回答終了]
-
-      [AIアシスタント回答開始]
-      テスト回答1
-      [AIアシスタント回答終了]
-      '''),
-      dedent('''
-      [質問]
-      テスト質問2
-
-      [参考回答開始]
-      テスト参考回答2
-      [参考回答終了]
-
-      [AIアシスタント回答開始]
-      テスト回答2
-      [AIアシスタント回答終了]
-      ''')
-    ]
-
-    mock_load.assert_called_once_with('data/prompts/lenient_accuracy.txt')
+    [AIアシスタント回答開始]
+    テスト回答2
+    [AIアシスタント回答終了]
+    ''')
+  ]
 
 
 def test_extract_score_success():
