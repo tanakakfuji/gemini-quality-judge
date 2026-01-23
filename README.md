@@ -30,7 +30,7 @@ REQUEST_INTERVAL_TIME=2.0
 - 実行例
 
 ```bash
-python -m src.main --accuracy strict --response data/responses/sample_response.csv --label data/labels/sample_label.csv --output_dir sample_dir
+python -m src.main --label data/labels/sample_label.csv --response data/responses/sample_response.csv --prompt data/prompts/eval_prompt.txt --output_dir sample_dir
 ```
 
 ## 背景
@@ -38,11 +38,11 @@ python -m src.main --accuracy strict --response data/responses/sample_response.c
 
 しかし、llm-jp-judgeには以下の3つの問題点があります。
 
-- 評価用モデルにGeminiを使用できない
+- 評価用LLMにGeminiを使用できない
 - 生成品質評価に参考回答を利用できない
 - 入力にcsvファイルが想定されていない
 
-そこで、評価用モデルにGeminiを使用できる自動評価ツールを提案します。本ツールは、実際のQAタスクで得られる回答結果と正解ラベルをまとめたcsvファイルから、参考回答付きの評価を実施することができます。
+そこで、評価用LLMにGeminiを使用できる自動評価ツールを提案します。本ツールは、実際のQAタスクで得られる回答結果と正解ラベルをまとめたcsvファイルから、参考回答付きの評価を実施することができます。
 
 ※ 実際のQAタスクの生成結果を評価することが目的のため、品質評価のみを行います。評価用プロンプトは、参考回答の利用に伴い、llm-jp-judgeのものを一部改変しています。
 
@@ -58,12 +58,8 @@ python -m src.main --accuracy strict --response data/responses/sample_response.c
 - 2つのファイル間で要素数が一致しない
 - 2つのファイル間でqueryの値が一致しない行が存在する
 
-### 2種類の評価用プロンプト
-`data/prompts` 配下には、`lenient_accuracy.txt` と`strict_accuracy.txt` という2種類の評価用プロンプトがあります。違いは、正確性において、参考回答の内容と厳密に比較するかどうかです。
-
-従って、評価用モデルの内部知識をもとに評価させたい場合は、`lenient_accuracy.txt` を、内部知識に頼らず、独自の知識に基づいて評価させたい場合は、`strict_accuracy.txt` を採用することをおすすめします。--accuracyオプションでどちらを使用するか指定します。
-
-どちらも以下の5つの観点で評価します。
+### 評価用プロンプト
+`data/prompts` 配下には、`eval_prompt.txt` という評価用プロンプトがあり、以下の5つの観点で評価します。
 
 - 正確性
 - 流暢性
@@ -78,8 +74,8 @@ python -m src.main --accuracy strict --response data/responses/sample_response.c
 |--|--|--|
 |--label|required|正解ラベルのcsvファイルを指定|
 |--response|required|評価対象のcsvファイルを指定|
+|--prompt|required|評価用プロンプトのテキストファイルを指定|
 |--output_dir|required|評価結果の出力先を指定|
-|--accuracy {strict, lenient}|required|正確性において、参考回答と厳密に比較するかどうかを選択|
 
 ### 環境変数
 実行時に指定する環境変数は以下の通りです。
@@ -91,8 +87,6 @@ python -m src.main --accuracy strict --response data/responses/sample_response.c
 |REQUEST_INTERVAL_TIME|リクエストを送信する間隔を秒数で指定|
 
 ※ Geminiのレート制限（無料枠）の回避を目的として、APIキーを複数指定することが可能です。
-
-例）10RPMのAPIキー3つをGEMINI_API_KEYSに指定 → 30RPMとなるため、2.0をREQUEST_INTERVAL_TIMEに指定すれば1分あたりのレート制限は超えないです。（実際のところ、API呼び出しは10秒近くかかるため、REQUEST_INTERVAL_TIMEは0.0でも良い）
 
 ### 出力結果
 `outputs/{output_dir}` 配下に`results.csv` と`avg_scores.json` が出力されます。それぞれのデータ形式は以下の通りです。
